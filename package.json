@@ -1,0 +1,116 @@
+{
+  "name": "electron-paintms",
+  "version": "1.0.0",
+  "description": "Système de gestion des factures pour Peinture MS",
+  "main": "electron/main.js",
+  "homepage": "./",
+  "author": "Bilal",
+  "license": "MIT",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:electron": "cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron electron/main.js",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:electron\"",
+    "build:frontend": "cd frontend && npm run build",
+    "build:server": "cd server && npm install --omit=dev",
+    "prebuild": "npm run build:frontend && npm run build:server",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "postinstall": "cd frontend && npm install && cd ../server && npm install && cd ../electron && npm install",
+    "clean": "rimraf dist && rimraf frontend/dist"
+  },
+  "build": {
+    
+    "appId": "com.paintms.electron",
+    "productName": "PaintMS",
+    "copyright": "Copyright © 2025 PaintMS",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "server/**/*",
+      "assets/**/*",
+      "!server/node_modules/*/test/**",
+      "!server/node_modules/*/.nyc_output/**",
+      "!server/node_modules/*/coverage/**",
+      "!server/node_modules/*/{README.md,readme.md,CHANGELOG.md,changelog.md}",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitkeep,.gitattributes,.npmignore,.eslintrc,.babelrc,.editorconfig,.flowconfig,.jshintrc,.eslintignore,.stylelintrc,.stylelintignore}"
+    ],
+    "extraResources": [
+      {
+        "from": "server",
+        "to": "server",
+        "filter": [
+          "**/*",
+          "!node_modules/**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "publisherName": "Peinture MS",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PaintMS",
+      "uninstallDisplayName": "PaintMS - Système de Gestion des Factures",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "license": "LICENSE.txt",
+      "language": "1036"
+    },
+    "portable": {
+      "artifactName": "PaintMS-${version}-portable.exe"
+    },
+    "publish": null
+  },
+  "dependencies": {
+     "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "@prisma/client": "^6.16.2",
+    "bcryptjs": "^3.0.2",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7",
+    "zod": "^4.1.9"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "^30.0.0",
+    "electron-builder": "^24.6.0",
+    "rimraf": "^5.0.10",
+    "nodemon": "3.1.10",
+    "prisma": "6.16.2"
+  },
+  "keywords": [
+    "electron",
+    "factures",
+    "peinture",
+    "gestion",
+    "paintms"
+  ]
+}
